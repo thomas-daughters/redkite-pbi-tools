@@ -35,6 +35,7 @@ def refresh_workspace(workspace, credentials):
 
     print('* Waiting for models to finish refreshing...')
     for dataset in workspace.datasets:
+        if 'Deployment Aid' in dataset.name: continue # Skip deployment aid
         try:
             refresh_status = dataset.get_refresh_state(wait=True) # Wait for each refresh to complete
             if refresh_status == 'Completed':
