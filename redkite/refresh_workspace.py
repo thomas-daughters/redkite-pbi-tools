@@ -4,6 +4,8 @@ def refresh_workspace(workspace, credentials):
     error = False
     
     for dataset in workspace.datasets:
+        if 'Deployment Aid' in dataset.name: continue # Skip deployment aid
+        
         if dataset.get_refresh_state() == 'Unknown': # Don't trigger refresh if model is already refreshing
             print(f'** [{dataset.name}] is already refreshing')
         else:
