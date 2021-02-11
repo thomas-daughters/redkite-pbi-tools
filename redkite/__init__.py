@@ -1,2 +1,2 @@
 from .portal import Portal
-from . import refresh_workspace
+from .refresh_workspace import *
