@@ -1,6 +1,8 @@
 import json
 
 def refresh_workspace(workspace, credentials):
+    error = False
+    
     for dataset in workspace.datasets:
         if dataset.get_refresh_state() == 'Unknown': # Don't trigger refresh if model is already refreshing
             print(f'** [{dataset.name}] is already refreshing')
@@ -11,11 +13,12 @@ def refresh_workspace(workspace, credentials):
             print(f'*** Reauthenticating data sources...') # Reauthenticate as tokens obtained during deployment will have expired
             for datasource in dataset.get_datasources():
                 server = json.loads(datasource.connection_details).get('server')
-                if cred = credentials.get(server):
+                if server in credentials:
+                    cred = credentials.get(server)
                     print(f'*** Updating credentials for {server}')
-                    if token in cred:
+                    if 'token' in cred:
                         datasource.update_credentials(cred['token'])
-                    elif username in cred:
+                    elif 'username' in cred:
                         datasource.update_credentials(cred['username'], cred['password'])
 
                 else:
@@ -35,3 +38,6 @@ def refresh_workspace(workspace, credentials):
 
         except SystemExit as e:
             print(f'!! ERROR. Refresh failed for [{dataset.name}]. {e}')
+            error = True
+
+    return not error
