@@ -41,12 +41,12 @@ class Portal:
         for e in r.json(): self.envs[e['Name']] = e
         return self.envs
 
-    def sync_report(self, report):
+    def sync_report(self, report, stage):
         payload = {
             "ReportName": report.name,
             "ModelType": 'PBI' if report.dataset.has_rls else 'NoRLS',
             "PowerBIConfigurations": [{
-                "EnvironmentId": self.envs[report.workspace.stage]['Id'],
+                "EnvironmentId": self.envs[stage]['Id'],
                 "GroupId": report.workspace.id,
                 "ReportId": report.id
             }]

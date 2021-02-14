@@ -3,7 +3,7 @@ from pbi import tools
 
 AID_REPORT_NAME = 'Deployment Aid Report'
 
-def deploy(workspace, dataset_filepath, report_filepaths, dataset_params=None, credentials=None, make_name=lambda *args:args, force_refresh=False, portals=None):
+def deploy(workspace, dataset_filepath, report_filepaths, dataset_params=None, credentials=None, force_refresh=False, on_report_success=None):
     # 1. Get dummy connections string from 'aid report'
     aid_report = workspace.find_report(AID_REPORT_NAME) # Find aid report to get new dataset connection string
     if aid_report is None:
@@ -62,10 +62,7 @@ def deploy(workspace, dataset_filepath, report_filepaths, dataset_params=None, c
         # 6. Repoint to refreshed model and update Portals (if given)
         for report in new_reports:
             report.repoint(dataset) # Once published, repoint from dummy to new dataset
-        
-            for portal in portals:
-                print(f'** Updating [{portal.env}] Portal')
-                portal.sync_report(report)
+            if on_report_success: on_report_success(report) # Perform any final post-deploy actions
 
     # 7. Delete old model (old report automatically go too)
     for old_dataset in matching_datasets:
