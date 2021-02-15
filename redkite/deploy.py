@@ -4,10 +4,9 @@ MODEL_NAME = 'Model.pbix'
 DELIMITER = ' -- '
 
 def name_builder(filepath, **kwargs): # "group -- filename"
-    group = kwargs.get('group')
-    branch_in_name = kwargs.get('branch_in_name')
-    filename = os.path.basename(filepath)
-    return DELIMITER.join([group, branch_in_name, filename])
+    components = [kwargs.get('group'), os.path.basename(filepath)]
+    if kwargs.get('branch_in_name'): components.insert(0, kwargs.get('branch_in_name'))
+    return DELIMITER.join(components)
 
 def deploy(pbi_root, workspace, dataset_params=None, credentials=None, force_refresh=False, on_report_success=None, exclusions=[], branch_in_name=False):
     error = False
