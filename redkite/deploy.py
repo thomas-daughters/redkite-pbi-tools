@@ -5,10 +5,11 @@ DELIMITER = ' -- '
 
 def name_builder(filepath, **kwargs): # "group -- filename"
     group = kwargs.get('group')
+    branch_in_name = kwargs.get('branch_in_name')
     filename = os.path.basename(filepath)
-    return DELIMITER.join([group, filename])
+    return DELIMITER.join([group, branch_in_name, filename])
 
-def deploy(pbi_root, workspace, dataset_params=None, credentials=None, force_refresh=False, on_report_success=None, exclusions=[]):
+def deploy(pbi_root, workspace, dataset_params=None, credentials=None, force_refresh=False, on_report_success=None, exclusions=[], branch_in_name=False):
     error = False
     root, dirs, files = next(os.walk(pbi_root)) # Cycle top level folders only
     for dir in dirs:
@@ -27,7 +28,7 @@ def deploy(pbi_root, workspace, dataset_params=None, credentials=None, force_ref
 
             # 3. Deploy
             print(f'* Deploying {len(report_files)} reports from [{dir}]')
-            workspace.deploy(dataset_file, report_files, dataset_params, credentials, force_refresh, on_report_success=on_report_success, name_builder=name_builder, group=dir)
+            workspace.deploy(dataset_file, report_files, dataset_params, credentials, force_refresh, on_report_success=on_report_success, name_builder=name_builder, group=dir, branch_in_name=branch_in_name)
 
         except SystemExit as e:
             print(f'!! ERROR. Deployment failed for [{root}]. {e}')
