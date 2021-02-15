@@ -9,6 +9,7 @@ def name_builder(filepath, **kwargs): # "group -- filename"
     return DELIMITER.join([group, filename])
 
 def deploy(pbi_root, workspace, dataset_params=None, credentials=None, force_refresh=False, on_report_success=None, exclusions=[]):
+    error = False
     root, dirs, files = next(os.walk(pbi_root)) # Cycle top level folders only
     for dir in dirs:
         try: # Allow other report groups to deploy, even if others fail
