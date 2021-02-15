@@ -8,7 +8,7 @@ def name_builder(filepath, **kwargs): # "group -- filename"
     filename = os.path.basename(filepath)
     return DELIMITER.join([group, filename])
 
-def deploy(pbi_root, workspace, dataset_params=None, credentials=None, on_report_success=None):
+def deploy(pbi_root, workspace, dataset_params=None, credentials=None, force_refresh=False, on_report_success=None):
     root, dirs, files = next(os.walk(pbi_root)) # Cycle top level folders only
     for dir in dirs:
         try: # Allow other report groups to deploy, even if others fail
@@ -26,7 +26,7 @@ def deploy(pbi_root, workspace, dataset_params=None, credentials=None, on_report
 
             # 3. Deploy
             print(f'* Deploying {len(report_files)} reports from [{dir}]')
-            workspace.deploy(dataset_file, report_files, dataset_params, credentials, on_report_success=on_report_success, name_builder=name_builder, group=dir)
+            workspace.deploy(dataset_file, report_files, dataset_params, credentials, force_refresh, on_report_success=on_report_success, name_builder=name_builder, group=dir)
 
         except SystemExit as e:
             print(f'!! ERROR. Deployment failed for [{root}]. {e}')
