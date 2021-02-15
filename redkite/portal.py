@@ -56,7 +56,7 @@ class Portal:
         if len(matching_reports) > 0: # If report exists on Portal, add it to API call (to trigger update rather than insert)
             payload['PowerBIReportId'] = matching_reports[0]['Id']
         else:
-            print(f'Adding {report.name} to {self.env} Portal')
+            print(f'! Warning: Adding {report.name} to {self.env} Portal')
 
         r = requests.put(f'{self.api_url}/admin/report-configuration', headers=self.get_headers(), json=payload)
         json = handle_request(r)

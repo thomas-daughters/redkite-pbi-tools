@@ -1,5 +1,4 @@
 import os
-from os.path import basename
 
 MODEL_NAME = 'Model.pbix'
 DELIMITER = ' -- '
