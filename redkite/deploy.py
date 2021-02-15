@@ -14,7 +14,7 @@ def deploy(workspace, dataset_filepath, report_filepaths, dataset_params=None, c
     connection_string = tools.get_connection_string(AID_REPORT_NAME)
 
     # 2. Publish dataset or get existing dataset (if unchanged and current)
-    dataset_name = name_builder(dataset_filepath, kwargs) if name_builder else os.path.basename(dataset_filepath) # Allow custom name formation, default to filename
+    dataset_name = name_builder(dataset_filepath, **kwargs) if name_builder else os.path.basename(dataset_filepath) # Allow custom name formation, default to filename
     matching_datasets = [d for d in workspace.datasets if d.name == dataset_name] # Look for existing dataset
     dataset_modified = tools.check_file_modified(dataset_filepath)
 
@@ -51,7 +51,7 @@ def deploy(workspace, dataset_filepath, report_filepaths, dataset_params=None, c
 
     # 5. Publish reports (using dummy connection string initially)
     for filepath in report_filepaths: # Import report files
-        report_name = name_builder(filepath, kwargs) if name_builder else os.path.basename(filepath) # Allow custom name formation, default to filename
+        report_name = name_builder(filepath, **kwargs) if name_builder else os.path.basename(filepath) # Allow custom name formation, default to filename
     
         print(f'** Publishing report [{filepath}] as [{report_name}]...') # Alter PBIX file with dummy dataset, in case dataset used during development has since been deleted (we repoint once on service)
         tools.rebind_report(filepath, connection_string)
@@ -60,7 +60,7 @@ def deploy(workspace, dataset_filepath, report_filepaths, dataset_params=None, c
         # 6. Repoint to refreshed model and update Portals (if given)
         for report in new_reports:
             report.repoint(dataset) # Once published, repoint from dummy to new dataset
-            if on_report_success: on_report_success(report, kwargs) # Perform any final post-deploy actions
+            if on_report_success: on_report_success(report, **kwargs) # Perform any final post-deploy actions
 
     # 7. Delete old model (old report automatically go too)
     for old_dataset in matching_datasets:
