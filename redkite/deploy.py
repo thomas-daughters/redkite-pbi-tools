@@ -26,7 +26,7 @@ def deploy(pbi_root, workspace, dataset_params=None, credentials=None, on_report
 
             # 3. Deploy
             print(f'* Deploying {len(report_files)} reports from [{dir}]')
-            deploy(workspace, dataset_file, report_files, dataset_params, credentials, on_report_success=on_report_success, name_builder=name_builder, group=dir)
+            workspace.deploy(dataset_file, report_files, dataset_params, credentials, on_report_success=on_report_success, name_builder=name_builder, group=dir)
 
         except SystemExit as e:
             print(f'!! ERROR. Deployment failed for [{root}]. {e}')
