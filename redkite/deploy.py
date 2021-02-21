@@ -1,4 +1,5 @@
 import os
+from pbi import tools
 
 MODEL_NAME = 'Model.pbix'
 DELIMITER = ' -- '
@@ -13,11 +14,13 @@ def deploy(pbi_root, workspace, dataset_params=None, credentials=None, force_ref
     root, dirs, files = next(os.walk(pbi_root)) # Cycle top level folders only
     for dir in dirs:
         try: # Allow other report groups to deploy, even if others fail
-            # 1. Look for model file
+            # 1. Look for model file, check whether it was modified in the last commit (so needs refeshing)
             dataset_file = os.path.join(root, dir, MODEL_NAME) # Expecting exactly one model
             if not os.path.exists(dataset_file):
                 print(f'! Warning: No model found in [{dir}]. Skipping folder.')
                 continue
+            
+            force_refresh = force_refresh or tools.check_file_modified(dataset_file)
 
             # 2. Find report files, including in subfolders (but ignoring model and any file/folder exclusions)
             report_files = []
