@@ -4,8 +4,9 @@ from .tools import check_file_modified
 MODEL_NAME = 'Model.pbix'
 DELIMITER = ' -- '
 
-def _name_builder(filepath, **kwargs): # "(branch) -- group -- filename -- release"
-    components = [kwargs.get('group'), os.path.basename(filepath), kwargs.get('release')]
+def _name_builder(filepath, **kwargs): # "(branch) -- group -- file -- release"
+    filename = os.path.basename(filepath)
+    components = [kwargs.get('group'), os.path.splitext(filename)[0], kwargs.get('release')]
     if kwargs.get('branch_in_name'): components.insert(0, kwargs.get('branch_in_name'))
     return DELIMITER.join(components)
 
