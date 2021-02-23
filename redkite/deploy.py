@@ -1,23 +1,31 @@
 import os
+from .tools import check_file_modified
 
 MODEL_NAME = 'Model.pbix'
 DELIMITER = ' -- '
 
-def name_builder(filepath, **kwargs): # "(branch) -- group -- filename"
-    components = [kwargs.get('group'), os.path.basename(filepath)]
+def _name_builder(filepath, **kwargs): # "(branch) -- group -- filename -- release"
+    components = [kwargs.get('group'), os.path.basename(filepath), kwargs.get('release')]
     if kwargs.get('branch_in_name'): components.insert(0, kwargs.get('branch_in_name'))
     return DELIMITER.join(components)
 
-def deploy(pbi_root, workspace, dataset_params=None, credentials=None, force_refresh=False, on_report_success=None, exclusions=[], branch_in_name=False, config_workspace=None):
+def _name_comparator(a, b):
+    a_components = a.split(DELIMITER)
+    b_components = b.split(DELIMITER)
+    return a_components[:-1] == b_components[:-1] # Compare all except final component (which is the release)
+
+def deploy(pbi_root, workspace, dataset_params=None, credentials=None, force_refresh=False, on_report_success=None, exclusions=[], branch_in_name=False, config_workspace=None, release=None):
     error = False
     root, dirs, files = next(os.walk(pbi_root)) # Cycle top level folders only
     for dir in dirs:
         try: # Allow other report groups to deploy, even if others fail
-            # 1. Look for model file
+            # 1. Look for model file, check whether it was modified in the last commit (so needs refeshing)
             dataset_file = os.path.join(root, dir, MODEL_NAME) # Expecting exactly one model
             if not os.path.exists(dataset_file):
                 print(f'! Warning: No model found in [{dir}]. Skipping folder.')
                 continue
+            
+            force_refresh = force_refresh or check_file_modified(dataset_file)
 
             # 2. Find report files, including in subfolders (but ignoring model and any file/folder exclusions)
             report_files = []
@@ -27,7 +35,7 @@ def deploy(pbi_root, workspace, dataset_params=None, credentials=None, force_ref
 
             # 3. Deploy
             print(f'* Deploying {len(report_files)} reports from [{dir}]')
-            workspace.deploy(dataset_file, report_files, dataset_params, credentials, force_refresh=force_refresh, on_report_success=on_report_success, name_builder=name_builder, group=dir, branch_in_name=branch_in_name, config_workspace=config_workspace)
+            workspace.deploy(dataset_file, report_files, dataset_params, credentials, force_refresh=force_refresh, on_report_success=on_report_success, name_builder=_name_builder, name_comparator=_name_comparator, group=dir, release=release, branch_in_name=branch_in_name, config_workspace=config_workspace)
 
         except SystemExit as e:
             print(f'!! ERROR. Deployment failed for [{root}]. {e}')
