@@ -1,5 +1,5 @@
 import os
-from redkite import tools
+from .tools import check_file_modified
 
 MODEL_NAME = 'Model.pbix'
 DELIMITER = ' -- '
@@ -25,7 +25,7 @@ def deploy(pbi_root, workspace, dataset_params=None, credentials=None, force_ref
                 print(f'! Warning: No model found in [{dir}]. Skipping folder.')
                 continue
             
-            force_refresh = force_refresh or tools.check_file_modified(dataset_file)
+            force_refresh = force_refresh or check_file_modified(dataset_file)
 
             # 2. Find report files, including in subfolders (but ignoring model and any file/folder exclusions)
             report_files = []
