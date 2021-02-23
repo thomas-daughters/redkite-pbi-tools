@@ -1,5 +1,5 @@
 import os
-from pbi import tools
+from redkite import tools
 
 MODEL_NAME = 'Model.pbix'
 DELIMITER = ' -- '
