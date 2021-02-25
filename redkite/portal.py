@@ -45,8 +45,11 @@ class Portal:
         if stage not in self.envs:
             return # Not all PBI environments will surface through Portal
 
+        report_name = report.name.split(' -- ')[0] # Remove release name from end
+        # TODO: Avoid hard coding delimiter and abstract to allow more generic patterns
+        
         payload = {
-            "ReportName": report.name,
+            "ReportName": report_name,
             "ModelType": 'PBI' if report.dataset.has_rls else 'NoRLS',
             "PowerBIConfigurations": [{
                 "EnvironmentId": self.envs[stage]['Id'],
@@ -55,11 +58,11 @@ class Portal:
             }]
         }
 
-        matching_reports = [r for r in self.reports if r['ReportName'] == report.name]
+        matching_reports = [r for r in self.reports if r['ReportName'] == report_name]
         if len(matching_reports) > 0: # If report exists on Portal, add it to API call (to trigger update rather than insert)
             payload['PowerBIReportId'] = matching_reports[0]['Id']
         else:
-            print(f'! Warning: Adding {report.name} to {self.env} Portal')
+            print(f'! Warning: Adding {report_name} to {self.env} Portal')
 
         r = requests.put(f'{self.api_url}/admin/report-configuration', headers=self.get_headers(), json=payload)
         json = handle_request(r)
