@@ -45,7 +45,7 @@ class Portal:
         if stage not in self.envs:
             return # Not all PBI environments will surface through Portal
 
-        report_name = report.name.split(' -- ')[0] # Remove release name from end
+        report_name = report.name.rsplit(' -- ', 1)[0] # Remove release name from end
         # TODO: Avoid hard coding delimiter and abstract to allow more generic patterns
         
         payload = {
