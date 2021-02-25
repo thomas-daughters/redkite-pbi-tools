@@ -42,6 +42,9 @@ class Portal:
         return self.envs
 
     def sync_report(self, report, stage):
+        if stage not in self.envs:
+            return # Not all PBI environments will surface through Portal
+
         payload = {
             "ReportName": report.name,
             "ModelType": 'PBI' if report.dataset.has_rls else 'NoRLS',
