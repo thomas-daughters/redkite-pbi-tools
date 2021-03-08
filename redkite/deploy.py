@@ -14,7 +14,7 @@ def _name_comparator(a, b):
     b_components = b.split(DELIMITER)
     return a_components[:-1] == b_components[:-1] # Compare all except final component (which is the release)
 
-def deploy(pbi_root, workspace, dataset_params=None, credentials=None, force_refresh=False, on_report_success=None, cherrypicks=[], config_workspace=None, release=None):
+def deploy(pbi_root, workspace, dataset_params=None, credentials=None, force_refresh=False, on_report_success=None, cherry_picks=[], config_workspace=None, release=None):
     error = False
     root, dirs, files = next(os.walk(pbi_root)) # Cycle top level folders only
     for dir in dirs:
@@ -31,7 +31,7 @@ def deploy(pbi_root, workspace, dataset_params=None, credentials=None, force_ref
             # If cherrypicks are provided, ignore everything else
             report_files = []
             for sub_root, sub_dirs, sub_files in os.walk(os.path.join(root, dir)):
-                new_reports = [os.path.join(sub_root, f) for f in sub_files if os.path.splitext(f)[1] == '.pbix' and f != MODEL_NAME and (not cherrypicks or f in cherrypicks or os.path.basename(sub_root) in cherrypicks)]
+                new_reports = [os.path.join(sub_root, f) for f in sub_files if os.path.splitext(f)[1] == '.pbix' and f != MODEL_NAME and (not cherry_picks or f in cherry_picks or os.path.basename(sub_root) in cherry_picks)]
                 report_files.extend(new_reports)
 
             # 3. Deploy
