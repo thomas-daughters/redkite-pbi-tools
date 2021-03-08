@@ -7,7 +7,7 @@ DELIMITER = ' -- '
 def _name_builder(filepath, **kwargs): # "(branch) -- group -- file -- release"
     filename = os.path.basename(filepath)
     components = [kwargs.get('group'), os.path.splitext(filename)[0], kwargs.get('release')]
-    return DELIMITER.join(components)
+    return DELIMITER.join(list(filter(None, components))) # Concatenate components using delimiter, ignoring any empty components
 
 def _name_comparator(a, b):
     a_components = a.split(DELIMITER)
