@@ -91,7 +91,8 @@ class Portal:
             'UserEmailAddress': email,
             'FirstName': first,
             'SecondName': last,    
-            'UserType': type        
+            'UserType': type,
+            'UserVendor': ''     
         }
 
         r = requests.post(f'{self.api_url}/users', headers=self.get_headers(), json=payload)
