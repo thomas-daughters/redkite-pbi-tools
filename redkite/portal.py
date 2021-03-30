@@ -91,20 +91,8 @@ class Portal:
         json = handle_request(r)
         return json
 
-    def create_user(self, email, first, last, type):
-        payload = {
-            'UserID': email,
-            'UserEmailAddress': email,
-            'FirstName': first,
-            'SecondName': last,    
-            'UserType': type,
-            'UserVendor': ''     
-        }
-
-        r = requests.post(f'{self.api_url}/users', headers=self.get_headers(), json=payload)
-
-        json = handle_request(r)
-        return json
+    def create_user(self, email, first, last, type_key, restrictions):
+        return self.update_user(email, email, first, last, type_key, restrictions)
 
     def update_user(self, id, email, first, last, type_key, restrictions):
         restrictions = []
