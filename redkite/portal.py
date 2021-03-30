@@ -122,11 +122,11 @@ class Portal:
 
     def update_user(self, id, email, first, last, type_key, restrictions):
         restrictions_payload = []
-        for k, v in restrictions.items():
+        for r in restrictions:
             restrictions_payload.append({
                 'UserKey': id,
-                "RestrictionKey": k,
-                "RestrictionValue": v,
+                "RestrictionKey": r['key'],
+                "RestrictionValue": r['value'],
             })
 
         payload = {
