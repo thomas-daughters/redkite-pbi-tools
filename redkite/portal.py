@@ -94,7 +94,7 @@ class Portal:
     def create_user(self, email, first, last, type_key, restrictions):
         restrictions_payload = []
         for k, v in restrictions.items():
-            restrictions.append({
+            restrictions_payload.append({
                 "UserKey": email,
                 "RestrictionKey": k,
                 "RestrictionValue": v,
