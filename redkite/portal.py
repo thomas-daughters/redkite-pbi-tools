@@ -85,6 +85,12 @@ class Portal:
         json = handle_request(r)
         return json
 
+    def get_user(self, id):
+        r = requests.get(f'{self.api_url}/admin/user/{id}', headers=self.get_headers())
+
+        json = handle_request(r)
+        return json
+
     def get_old_users(self):
         r = requests.get(f'{self.api_url}/users', headers=self.get_headers())
 
