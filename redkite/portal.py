@@ -102,7 +102,7 @@ class Portal:
 
     def update_user(self, id, email, first, last, type_key, restrictions):
         restrictions = []
-        for k, v in restrictions.items:
+        for k, v in restrictions.items():
             restrictions.append({
                 "UserKey": id,
                 "RestrictionKey": k,
