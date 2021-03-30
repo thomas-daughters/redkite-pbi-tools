@@ -100,29 +100,27 @@ class Portal:
         json = handle_request(r)
         return json
 
-    def update_user(self, id, email, first, last, type):
+    def update_user(self, id, email, first, last, type_key, restrictions):
+        restrictions = []
+        for k, v in restrictions.items:
+            restrictions.append({
+                "UserKey": id,
+                "RestrictionKey": k,
+                "RestrictionValue": v,
+            })
+
         payload = {
-            'UserID': id,
-            'UserEmailAddress': email,
-            'FirstName': first,
-            'SecondName': last,    
-            'UserType': type,
-            'UserVendor': ''      
+            'User': {
+                'UserKey': id,
+                'EmailAddress': email,
+                'FirstName': first,
+                'SecondName': last,    
+                'UserTypeKey': type_key,
+            },
+            'Restrictions': restrictions
         }
 
-        r = requests.put(f'{self.api_url}/users', headers=self.get_headers(), json=payload)
-
-        json = handle_request(r)
-        return json
-
-    def update_restrictions(self, user_id, restrictions):
-        payload = {
-            'GPSUserRestrictionID': user_id
-        }
-
-        payload.update(restrictions)
-
-        r = requests.put(f'{self.api_url}/user-restrictions', headers=self.get_headers(), json=payload)
+        r = requests.put(f'{self.api_url}/admin/user', headers=self.get_headers(), json=payload)
 
         json = handle_request(r)
         return json
