@@ -97,6 +97,12 @@ class Portal:
         json = handle_request(r)
         return json
 
+    def get_user_profiles(self):
+        r = requests.get(f'{self.api_url}/admin/profile', headers=self.get_headers())
+
+        json = handle_request(r)
+        return json
+
     def create_user(self, email, first, last, type_key, restrictions):
         restrictions_payload = []
         for k, v in restrictions.items():
