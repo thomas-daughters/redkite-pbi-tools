@@ -133,7 +133,8 @@ class Portal:
         return json
 
     def update_user(self, id, email, first, last, type_key, restrictions):
-        restrictions_payload = []
+        restrictions_payload = self.get_user(id)
+        
         for r in restrictions:
             restrictions_payload.append({
                 'UserKey': id,
