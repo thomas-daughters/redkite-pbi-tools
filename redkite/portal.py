@@ -92,7 +92,29 @@ class Portal:
         return json
 
     def create_user(self, email, first, last, type_key, restrictions):
-        return self.update_user(email, email, first, last, type_key, restrictions)
+        restrictions = []
+        for k, v in restrictions.items():
+            restrictions.append({
+                "UserKey": email,
+                "RestrictionKey": k,
+                "RestrictionValue": v,
+            })
+
+        payload = {
+            'User': {
+                'UserKey': email,
+                'EmailAddress': email,
+                'FirstName': first,
+                'SecondName': last,    
+                'UserTypeKey': type_key,
+            },
+            'Restrictions': restrictions
+        }
+
+        r = requests.post(f'{self.api_url}/admin/user', headers=self.get_headers(), json=payload)
+
+        json = handle_request(r)
+        return json
 
     def update_user(self, id, email, first, last, type_key, restrictions):
         restrictions = []
