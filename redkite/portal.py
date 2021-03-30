@@ -72,3 +72,9 @@ class Portal:
     def delete_report(self, report):
         r = requests.delete(f'{self.api_url}/admin/report-configuration/{report["Id"]}', headers=self.get_headers())
         handle_request(r)
+
+    def get_restriction_types(self):
+        r = requests.get(f'{self.api_url}/admin/user-restriction-type', headers=self.get_headers())
+
+        json = handle_request(r)
+        return json
