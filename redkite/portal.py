@@ -115,9 +115,9 @@ class Portal:
         json = handle_request(r)
         return json
 
-    def update_restrictions(self, email, restrictions):
+    def update_restrictions(self, user_id, restrictions):
         payload = {
-            'GPSUserEmailAddress': email
+            'GPSUserRestrictionID': user_id
         }
 
         payload.update(restrictions)
