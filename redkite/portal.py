@@ -95,14 +95,12 @@ class Portal:
         restrictions_payload = []
         for k, v in restrictions.items():
             restrictions_payload.append({
-                "UserKey": email,
                 "RestrictionKey": k,
                 "RestrictionValue": v,
             })
 
         payload = {
             'User': {
-                'UserKey': email,
                 'EmailAddress': email,
                 'FirstName': first,
                 'SecondName': last,    

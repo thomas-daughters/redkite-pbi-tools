@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='redkite-pbi-tools',
-    version='0.2.29',
+    version='0.2.30',
     packages=find_packages(exclude=['tests*']),
     license='MIT',
     description='Redkite DevOps tools for working with PBI',
