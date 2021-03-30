@@ -78,3 +78,28 @@ class Portal:
 
         json = handle_request(r)
         return json
+
+    def update_user(self, email, first, last, type):
+        payload = {
+            'UserEmailAddress': email,
+            'FirstName': first,
+            'SecondName': last,    
+            'UserType': type        
+        }
+
+        r = requests.put(f'{self.api_url}/users', headers=self.get_headers(), json=payload)
+
+        json = handle_request(r)
+        return json
+
+    def update_restrictions(self, email, restrictions):
+        payload = {
+            'GPSUserEmailAddress': email
+        }
+
+        payload.update(restrictions)
+
+        r = requests.put(f'{self.api_url}/user-restrictions', headers=self.get_headers(), json=payload)
+
+        json = handle_request(r)
+        return json
