@@ -79,8 +79,15 @@ class Portal:
         json = handle_request(r)
         return json
 
-    def update_user(self, email, first, last, type):
+    def get_users(self):
+        r = requests.get(f'{self.api_url}/users', headers=self.get_headers())
+
+        json = handle_request(r)
+        return json
+
+    def create_user(self, email, first, last, type):
         payload = {
+            'UserID': id,
             'UserEmailAddress': email,
             'FirstName': first,
             'SecondName': last,    
@@ -88,6 +95,20 @@ class Portal:
         }
 
         r = requests.put(f'{self.api_url}/users', headers=self.get_headers(), json=payload)
+
+        json = handle_request(r)
+        return json
+
+    def update_user(self, id, email, first, last, type):
+        payload = {
+            'UserID': id,
+            'UserEmailAddress': email,
+            'FirstName': first,
+            'SecondName': last,    
+            'UserType': type        
+        }
+
+        r = requests.post(f'{self.api_url}/users', headers=self.get_headers(), json=payload)
 
         json = handle_request(r)
         return json
