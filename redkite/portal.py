@@ -107,11 +107,10 @@ class Portal:
         restrictions_payload = []
         for r in restrictions:
             restrictions_payload.append({
-                'UserKey': id,
                 "RestrictionKey": r['key'],
                 "RestrictionValue": r['value'],
             })
-            
+
         payload = {
             'User': {
                 'EmailAddress': email,
