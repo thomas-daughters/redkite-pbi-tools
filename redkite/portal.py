@@ -118,7 +118,7 @@ class Portal:
         restrictions_payload = []
         for k, v in restrictions.items():
             restrictions_payload.append({
-                "UserKey": id,
+                'UserKey': id,
                 "RestrictionKey": k,
                 "RestrictionValue": v,
             })
@@ -134,7 +134,7 @@ class Portal:
             'Restrictions': restrictions_payload
         }
 
-        r = requests.put(f'{self.api_url}/admin/user', headers=self.get_headers(), json=payload)
+        r = requests.post(f'{self.api_url}/admin/user', headers=self.get_headers(), json=payload)
 
         json = handle_request(r)
         return json
