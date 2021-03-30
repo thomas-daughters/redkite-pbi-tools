@@ -93,7 +93,7 @@ class Portal:
             'UserType': type        
         }
 
-        r = requests.put(f'{self.api_url}/users', headers=self.get_headers(), json=payload)
+        r = requests.post(f'{self.api_url}/users', headers=self.get_headers(), json=payload)
 
         json = handle_request(r)
         return json
@@ -107,7 +107,7 @@ class Portal:
             'UserType': type        
         }
 
-        r = requests.post(f'{self.api_url}/users', headers=self.get_headers(), json=payload)
+        r = requests.put(f'{self.api_url}/users', headers=self.get_headers(), json=payload)
 
         json = handle_request(r)
         return json
