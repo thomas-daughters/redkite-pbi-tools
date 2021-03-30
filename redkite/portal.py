@@ -85,6 +85,12 @@ class Portal:
         json = handle_request(r)
         return json
 
+    def get_user_types(self):
+        r = requests.get(f'{self.api_url}/admin/user-type', headers=self.get_headers())
+
+        json = handle_request(r)
+        return json
+
     def create_user(self, email, first, last, type):
         payload = {
             'UserID': email,
