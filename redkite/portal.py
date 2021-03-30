@@ -140,7 +140,7 @@ class Portal:
             'Restrictions': restrictions_payload
         }
 
-        r = requests.post(f'{self.api_url}/admin/user/{id}', headers=self.get_headers(), json=payload)
+        r = requests.put(f'{self.api_url}/admin/user/{id}', headers=self.get_headers(), json=payload)
 
         json = handle_request(r)
         return json
