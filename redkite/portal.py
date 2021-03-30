@@ -92,7 +92,7 @@ class Portal:
         return json
 
     def create_user(self, email, first, last, type_key, restrictions):
-        restrictions = []
+        restrictions_payload = []
         for k, v in restrictions.items():
             restrictions.append({
                 "UserKey": email,
@@ -108,7 +108,7 @@ class Portal:
                 'SecondName': last,    
                 'UserTypeKey': type_key,
             },
-            'Restrictions': restrictions
+            'Restrictions': restrictions_payload
         }
 
         r = requests.post(f'{self.api_url}/admin/user', headers=self.get_headers(), json=payload)
