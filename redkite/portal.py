@@ -87,7 +87,6 @@ class Portal:
 
     def create_user(self, email, first, last, type):
         payload = {
-            'UserID': id,
             'UserEmailAddress': email,
             'FirstName': first,
             'SecondName': last,    
