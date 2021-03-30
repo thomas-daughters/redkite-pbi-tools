@@ -80,7 +80,7 @@ class Portal:
         return json
 
     def get_users(self):
-        r = requests.get(f'{self.api_url}/users', headers=self.get_headers())
+        r = requests.get(f'{self.api_url}/admin/user', headers=self.get_headers())
 
         json = handle_request(r)
         return json
