@@ -72,3 +72,88 @@ class Portal:
     def delete_report(self, report):
         r = requests.delete(f'{self.api_url}/admin/report-configuration/{report["Id"]}', headers=self.get_headers())
         handle_request(r)
+
+    def get_restriction_types(self):
+        r = requests.get(f'{self.api_url}/admin/user-restriction-type', headers=self.get_headers())
+
+        json = handle_request(r)
+        return json
+
+    def get_users(self):
+        r = requests.get(f'{self.api_url}/admin/user', headers=self.get_headers())
+
+        json = handle_request(r)
+        return json
+
+    def get_user(self, id):
+        r = requests.get(f'{self.api_url}/admin/user/{id}', headers=self.get_headers())
+
+        json = handle_request(r)
+        return json
+
+    def get_old_users(self):
+        r = requests.get(f'{self.api_url}/users', headers=self.get_headers())
+
+        json = handle_request(r)
+        return json
+
+    def get_user_types(self):
+        r = requests.get(f'{self.api_url}/admin/user-type', headers=self.get_headers())
+
+        json = handle_request(r)
+        return json
+
+    def get_user_profiles(self):
+        r = requests.get(f'{self.api_url}/admin/profile', headers=self.get_headers())
+
+        json = handle_request(r)
+        return json
+
+    def create_user(self, email, first, last, type_key, restrictions):
+        restrictions_payload = []
+        for r in restrictions:
+            restrictions_payload.append({
+                "RestrictionKey": r['key'],
+                "RestrictionValue": r['value'],
+            })
+
+        payload = {
+            'User': {
+                'EmailAddress': email,
+                'FirstName': first,
+                'SecondName': last,    
+                'UserTypeKey': type_key,
+            },
+            'Restrictions': restrictions_payload
+        }
+
+        r = requests.post(f'{self.api_url}/admin/user', headers=self.get_headers(), json=payload)
+
+        json = handle_request(r)
+        return json
+
+    def update_user(self, id, email, first, last, type_key, restrictions):
+        restrictions_payload = self.get_user(id)
+        
+        for r in restrictions:
+            restrictions_payload.append({
+                'UserKey': id,
+                "RestrictionKey": r['key'],
+                "RestrictionValue": r['value'],
+            })
+
+        payload = {
+            'User': {
+                'UserKey': id,
+                'EmailAddress': email,
+                'FirstName': first,
+                'SecondName': last,    
+                'UserTypeKey': type_key,
+            },
+            'Restrictions': restrictions_payload
+        }
+
+        r = requests.put(f'{self.api_url}/admin/user/{id}', headers=self.get_headers(), json=payload)
+
+        json = handle_request(r)
+        return json
