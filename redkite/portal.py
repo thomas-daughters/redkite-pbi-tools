@@ -41,7 +41,7 @@ class Portal:
         for e in r.json(): self.envs[e['Name']] = e
         return self.envs
 
-    def sync_report(self, report, stage):
+    def sync_report(self, report, stage, tag=None):
         if stage not in self.envs:
             return # Not all PBI environments will surface through Portal
 
@@ -52,6 +52,7 @@ class Portal:
         payload = {
             "ReportName": report_name,
             "ModelType": 'PBI' if report.dataset.has_rls else 'NoRLS',
+            "Tags": tag,
             "PowerBIConfigurations": [{
                 "EnvironmentId": self.envs[stage]['Id'],
                 "GroupId": report.workspace.id,
