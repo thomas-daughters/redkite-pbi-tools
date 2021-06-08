@@ -14,7 +14,7 @@ def _name_comparator(a, b):
     b_components = b.split(DELIMITER)
     return a_components[:-1] == b_components[:-1] # Compare all except final component (which is the release)
 
-def deploy(pbi_root, workspace, dataset_params=None, credentials=None, force_refresh=False, on_report_success=None, cherry_picks=None, config_workspace=None, release=None):
+def deploy(pbi_root, workspace, dataset_params=None, credentials=None, force_refresh=None, on_report_success=None, cherry_picks=None, config_workspace=None, release=None):
     error = False
     root, dirs, files = next(os.walk(pbi_root)) # Cycle top level folders only
     for dir in dirs:
@@ -25,7 +25,8 @@ def deploy(pbi_root, workspace, dataset_params=None, credentials=None, force_ref
                 print(f'! Warning: No model found in [{dir}]. Skipping folder.')
                 continue
             
-            force_refresh = force_refresh or check_file_modified(dataset_file)
+            #force a model refresh if force_refresh = True, deploy model without a refresh if force_refresh = False, otherwise refresh only if model was part of the latest commit
+            if force_refresh is None: force_refresh = check_file_modified(dataset_file)
 
             # 2. Find report files, including in subfolders (but ignoring model)
             # If cherrypicks are provided, ignore everything else
