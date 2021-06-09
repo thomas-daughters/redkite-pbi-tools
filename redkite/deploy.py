@@ -25,7 +25,7 @@ def deploy(pbi_root, workspace, dataset_params=None, credentials=None, force_ref
                 print(f'! Warning: No model found in [{dir}]. Skipping folder.')
                 continue
             
-            # Respect 'refresh verride' value if given, otherwise check the latest commit to see whether the model was changed
+            # Respect 'refresh override' value if given, otherwise check the latest commit to see whether the model was changed
             local_force_refresh = check_file_modified(dataset_file) if force_refresh is None else force_refresh
 
             # 2. Find report files, including in subfolders (but ignoring model)
