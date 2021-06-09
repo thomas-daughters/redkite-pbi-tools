@@ -27,9 +27,8 @@ def deploy(pbi_root, workspace, dataset_params=None, credentials=None, force_ref
             
             print(f"force_refresh={force_refresh}")
             #force a model refresh if force_refresh = True, deploy model without a refresh if force_refresh = False, otherwise refresh only if model was part of the latest commit
-            if force_refresh is None:
-                force_refresh = check_file_modified(dataset_file)
-                print(f"force_refresh={force_refresh}")
+            local_force_refresh = check_file_modified(dataset_file) if force_refresh is None else force_refresh
+            print(f"force_refresh={local_force_refresh}")
 
             # 2. Find report files, including in subfolders (but ignoring model)
             # If cherrypicks are provided, ignore everything else
@@ -40,7 +39,7 @@ def deploy(pbi_root, workspace, dataset_params=None, credentials=None, force_ref
 
             # 3. Deploy
             print(f'* Deploying {len(report_files)} reports from [{dir}]')
-            workspace.deploy(dataset_file, report_files, dataset_params, credentials, force_refresh=force_refresh, on_report_success=on_report_success, name_builder=_name_builder, name_comparator=_name_comparator, group=dir, release=release, config_workspace=config_workspace)
+            workspace.deploy(dataset_file, report_files, dataset_params, credentials, force_refresh=local_force_refresh, on_report_success=on_report_success, name_builder=_name_builder, name_comparator=_name_comparator, group=dir, release=release, config_workspace=config_workspace)
 
         except SystemExit as e:
             print(f'!! ERROR. Deployment failed for [{root}]. {e}')
