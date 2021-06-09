@@ -19,16 +19,14 @@ def deploy(pbi_root, workspace, dataset_params=None, credentials=None, force_ref
     root, dirs, files = next(os.walk(pbi_root)) # Cycle top level folders only
     for dir in dirs:
         try: # Allow other report groups to deploy, even if others fail
-            # 1. Look for model file, check whether it was modified in the last commit (so needs refeshing)
+            # 1. Look for model file
             dataset_file = os.path.join(root, dir, MODEL_NAME) # Expecting exactly one model
             if not os.path.exists(dataset_file):
                 print(f'! Warning: No model found in [{dir}]. Skipping folder.')
                 continue
             
-            print(f"force_refresh={force_refresh}")
-            #force a model refresh if force_refresh = True, deploy model without a refresh if force_refresh = False, otherwise refresh only if model was part of the latest commit
+            # Respect 'refresh override' value if given, otherwise check the latest commit to see whether the model was changed
             local_force_refresh = check_file_modified(dataset_file) if force_refresh is None else force_refresh
-            print(f"force_refresh={local_force_refresh}")
 
             # 2. Find report files, including in subfolders (but ignoring model)
             # If cherrypicks are provided, ignore everything else
