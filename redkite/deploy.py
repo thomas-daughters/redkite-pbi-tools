@@ -25,8 +25,11 @@ def deploy(pbi_root, workspace, dataset_params=None, credentials=None, force_ref
                 print(f'! Warning: No model found in [{dir}]. Skipping folder.')
                 continue
             
+            print(f"force_refresh={force_refresh}")
             #force a model refresh if force_refresh = True, deploy model without a refresh if force_refresh = False, otherwise refresh only if model was part of the latest commit
-            if force_refresh is None: force_refresh = check_file_modified(dataset_file)
+            if force_refresh is None:
+                force_refresh = check_file_modified(dataset_file)
+                print(f"force_refresh={force_refresh}")
 
             # 2. Find report files, including in subfolders (but ignoring model)
             # If cherrypicks are provided, ignore everything else
