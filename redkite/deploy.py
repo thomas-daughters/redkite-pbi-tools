@@ -14,7 +14,7 @@ def _name_comparator(a, b):
     b_components = b.split(DELIMITER)
     return a_components[:-1] == b_components[:-1] # Compare all except final component (which is the release)
 
-def deploy(pbi_root, workspace, dataset_params=None, credentials=None, force_refresh=None, on_report_success=None, cherry_picks=None, config_workspace=None, release=None):
+def deploy(pbi_root, workspace, dataset_params=None, credentials=None, force_refresh=None, delete_previous=True, on_report_success=None, cherry_picks=None, config_workspace=None, release=None):
     error = False
     root, dirs, files = next(os.walk(pbi_root)) # Cycle top level folders only
     for dir in dirs:
@@ -37,7 +37,7 @@ def deploy(pbi_root, workspace, dataset_params=None, credentials=None, force_ref
 
             # 3. Deploy
             print(f'* Deploying {len(report_files)} reports from [{dir}]')
-            workspace.deploy(dataset_file, report_files, dataset_params, credentials, force_refresh=local_force_refresh, on_report_success=on_report_success, name_builder=_name_builder, name_comparator=_name_comparator, group=dir, release=release, config_workspace=config_workspace)
+            workspace.deploy(dataset_file, report_files, dataset_params, credentials, force_refresh=local_force_refresh, delete_previous=delete_previous, on_report_success=on_report_success, name_builder=_name_builder, name_comparator=_name_comparator, group=dir, release=release, config_workspace=config_workspace)
 
         except SystemExit as e:
             print(f'!! ERROR. Deployment failed for [{root}]. {e}')
