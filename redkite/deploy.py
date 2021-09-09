@@ -36,7 +36,7 @@ def deploy(pbi_root, workspace, dataset_params=None, credentials=None, force_ref
                 report_files.extend(new_reports)
 
             # 3. Deploy
-            print(f'* Deploying {len(report_files)} reports from [{dir}]')  
+            print(f'* Deploying {len(report_files)} reports from [{dir}]')
             workspace.deploy(dataset_file, report_files, dataset_params, credentials, force_refresh=local_force_refresh, on_report_success=on_report_success, name_builder=_name_builder, name_comparator=_name_comparator, group=dir, release=release, config_workspace=config_workspace, keep_report_ids=keep_report_ids)
 
         except SystemExit as e:
