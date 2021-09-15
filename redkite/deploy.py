@@ -10,10 +10,10 @@ def _name_builder(filepath, **kwargs): # "(branch) -- group -- file -- release"
     return DELIMITER.join(list(filter(None, components))) # Concatenate components using delimiter, ignoring any empty components
 
 def _name_comparator(a, b, keep_report_ids=False):
-    compare_depth = None if keep_report_ids else -1
+    compare_depth = None if keep_report_ids else -1 # If not keeping report ids then the final component is the release name
     a_components = a.split(DELIMITER)
     b_components = b.split(DELIMITER)
-    return a_components[:compare_depth] == b_components[:compare_depth] # Compare all except final component (which is the release)
+    return a_components[:compare_depth] == b_components[:compare_depth]
 
 def deploy(pbi_root, workspace, dataset_params=None, credentials=None, force_refresh=None, on_report_success=None, cherry_picks=None, config_workspace=None, release=None, keep_report_ids=None):
     error = False
