@@ -14,7 +14,7 @@ def _name_comparator(a, b, overwrite_reports=False):
     a_components = a.split(DELIMITER)
     b_components = b.split(DELIMITER)
     return a_components[:-1] == b_components[:-1] # Compare all except final component (which is the release)
-    
+
 def deploy(pbi_root, workspace, dataset_params=None, credentials=None, force_refresh=None, on_report_success=None, cherry_picks=None, config_workspace=None, release=None, overwrite_reports=False):
     error = False
     root, dirs, files = next(os.walk(pbi_root)) # Cycle top level folders only
