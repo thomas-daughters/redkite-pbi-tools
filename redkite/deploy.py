@@ -9,12 +9,13 @@ def _name_builder(filepath, **kwargs): # "(branch) -- group -- file -- release"
     components = [kwargs.get('group'), os.path.splitext(filename)[0], kwargs.get('release')]
     return DELIMITER.join(list(filter(None, components))) # Concatenate components using delimiter, ignoring any empty components
 
-def _name_comparator(a, b):
+def _name_comparator(a, b, overwrite_reports=False):
+    if overwrite_reports: return a == b # If overwriting reports the names will share the same structure
     a_components = a.split(DELIMITER)
     b_components = b.split(DELIMITER)
     return a_components[:-1] == b_components[:-1] # Compare all except final component (which is the release)
 
-def deploy(pbi_root, workspace, dataset_params=None, credentials=None, force_refresh=None, on_report_success=None, cherry_picks=None, config_workspace=None, release=None):
+def deploy(pbi_root, workspace, dataset_params=None, credentials=None, force_refresh=None, on_report_success=None, cherry_picks=None, config_workspace=None, release=None, overwrite_reports=False):
     error = False
     root, dirs, files = next(os.walk(pbi_root)) # Cycle top level folders only
     for dir in dirs:
@@ -37,7 +38,7 @@ def deploy(pbi_root, workspace, dataset_params=None, credentials=None, force_ref
 
             # 3. Deploy
             print(f'* Deploying {len(report_files)} reports from [{dir}]')
-            workspace.deploy(dataset_file, report_files, dataset_params, credentials, force_refresh=local_force_refresh, on_report_success=on_report_success, name_builder=_name_builder, name_comparator=_name_comparator, group=dir, release=release, config_workspace=config_workspace)
+            workspace.deploy(dataset_file, report_files, dataset_params, credentials, force_refresh=local_force_refresh, on_report_success=on_report_success, name_builder=_name_builder, name_comparator=_name_comparator, group=dir, release=release, config_workspace=config_workspace, overwrite_reports=overwrite_reports)
 
         except SystemExit as e:
             print(f'!! ERROR. Deployment failed for [{root}]. {e}')
